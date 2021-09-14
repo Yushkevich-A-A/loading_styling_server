@@ -6,7 +6,8 @@ const Router = require('koa-router');
 const json = require('koa-json');
 const router = new Router();
 const uuid = require('uuid');
-var slow = require('koa-slow');
+const slow = require('koa-slow');
+const { db } = require('./DB/db');
 
 app.use( koaBody({
   urlencoded: true,
@@ -18,7 +19,7 @@ app.use(json());
 
 app.use(slow({
   url: /getdata$/i,
-  delay: 10000
+  delay: 10000,
 }))
 
 app.use( async (ctx, next) => {
@@ -60,6 +61,15 @@ router.get('/getdata', (ctx) => {
   console.log('запрос получен')
   ctx.response.status = 404;
   console.log('запрос отправлен')
+})
+
+router.get('/getnews', (ctx) => {
+  const randomValue = Math.round(Math.random() * 10);
+  if (randomValue > 5) {
+    ctx.response.body = db.getNews();
+    return;
+  }
+  ctx.response.status = 500;
 })
 
 
