@@ -58,8 +58,9 @@ const port = process.env.PORT || 7070;
 const server = http.createServer(app.callback());
 
 router.get('/getdata', (ctx) => {
-  console.log('запрос получен')
-  ctx.response.status = 404;
+  console.log('запрос получен');
+  ctx.response.body = db.getNews();
+  ctx.response.status = 200;
   console.log('запрос отправлен')
 })
 
